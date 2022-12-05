@@ -1,0 +1,33 @@
+{
+	"info": {
+		"_postman_id": "637d806f-ca59-4d40-8d1f-6e1a498e7a54",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24668494"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:7000",
+					"host": [
+						"localhost"
+					],
+					"port": "7000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
