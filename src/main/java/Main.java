@@ -12,20 +12,23 @@ public class Main {
         FileInputStream propInput;
         Connection c = null;
         try{
+            //Get configs
             propInput = new FileInputStream(propertiesPath);
             appProps.load(propInput);
-            String db_src_url = appProps.getProperty("URL");
-            String db_name = appProps.getProperty("DB");
-            String db_user = appProps.getProperty("USER");
-            String db_pass = appProps.getProperty("PASSWORD");
-            Class.forName("org.postgresql.Driver");
-            String URL = db_src_url + '/' + db_name;
-            Connection conn = DriverManager.getConnection(URL, db_user, db_pass);
+
+            //Prepare Database
+            Util.connect(appProps);
+            Util.init();
+
+            //Init Web-Server(REST)
             Javalin app = Javalin.create().start(7000);
             app.get("/", ctx -> ctx.result("Hello World"));
             app.get("/login", ctx -> ctx.result("Trying to log in"));
-            app.get("/user/:name", ctx -> {
+            app.get("/user/{name}", ctx -> {
                 ctx.result(ctx.pathParam("name") );
+            });
+            app.post("/user/register", ctx -> {
+                ctx.result("registered" );
             });
             app.get("/admin/approve", ctx -> ctx.result("Trying to approve reimbursement"));
             app.get("/admin/view", ctx -> ctx.result("Get all reimbursements"));
@@ -41,5 +44,3 @@ public class Main {
         }
     }
 }
-
-
