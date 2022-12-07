@@ -1,3 +1,5 @@
+package util;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +15,7 @@ public class Util {
         String db_name = appProps.getProperty("DB");
         String db_user = appProps.getProperty("USER");
         String db_pass = appProps.getProperty("PASSWORD");
-        Class.forName("org.postgresql.Driver");
+        Class.forName(appProps.getProperty("DRIVER"));
         String URL = db_src_url + '/' + db_name;
         Util.conn = DriverManager.getConnection(URL, db_user, db_pass);
     }
@@ -26,7 +28,7 @@ public class Util {
             ps.executeUpdate();
             //TICKET TABLE
             ps = conn.prepareStatement("drop table if exists tickets;" +
-                    "create table tickets(username varchar(255) references users(username), amount real, description varchar(255), pending boolean);");
+                    "create table tickets(id serial, username varchar(255) references users(username), amount real, description varchar(255), pending boolean);");
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();

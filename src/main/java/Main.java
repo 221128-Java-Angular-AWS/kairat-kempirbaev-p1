@@ -1,20 +1,22 @@
 import io.javalin.Javalin;
+import userController.UserController;
+import util.Util;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.sql.*;
 public class Main {
     public static void main(String[] args)  {
-        String propertiesPath = "src/main/resources/app.properties";
+        String propertiesPath = "app.properties";
         Properties appProps = new Properties();
-        FileInputStream propInput;
         Connection c = null;
         try{
             //Get configs
-            propInput = new FileInputStream(propertiesPath);
-            appProps.load(propInput);
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream ins = loader.getResourceAsStream(propertiesPath);
+            appProps.load(ins);
 
             //Prepare Database
             Util.connect(appProps);
@@ -23,13 +25,11 @@ public class Main {
             //Init Web-Server(REST)
             Javalin app = Javalin.create().start(7000);
             app.get("/", ctx -> ctx.result("Hello World"));
-            app.get("/login", ctx -> ctx.result("Trying to log in"));
+            app.post("/user/login", UserController::login);
             app.get("/user/{name}", ctx -> {
-                ctx.result(ctx.pathParam("name") );
+                ctx.result("binded username space"+ctx.pathParam("name") );
             });
-            app.post("/user/register", ctx -> {
-                ctx.result("registered" );
-            });
+            app.post("/user/register", UserController::createUser);
             app.get("/admin/approve", ctx -> ctx.result("Trying to approve reimbursement"));
             app.get("/admin/view", ctx -> ctx.result("Get all reimbursements"));
         }catch (SQLException e){
