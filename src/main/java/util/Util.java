@@ -23,12 +23,14 @@ public class Util {
         try {
             Connection conn = Util.conn;
             //USER TABLE
-            PreparedStatement ps = conn.prepareStatement("drop table if exists users;" +
-                    "create table users(username varchar(255) PRIMARY KEY, password varchar(255), session varchar(255), manager boolean);" );
+            PreparedStatement ps = conn.prepareStatement(" drop  table   if exists  users CASCADE;" +
+                    "create table users(username varchar(255) PRIMARY KEY, \"password\" varchar(255) NOT NULL, session varchar(255), manager boolean NOT NULL);" +
+                    "CREATE INDEX users_session ON users(session);");
             ps.executeUpdate();
             //TICKET TABLE
-            ps = conn.prepareStatement("drop table if exists tickets;" +
-                    "create table tickets(id serial, username varchar(255) references users(username), amount real, description varchar(255), pending boolean);");
+            ps = conn.prepareStatement("drop table if exists tickets CASCADE;" +
+                    "create table tickets(id serial PRIMARY KEY, username varchar(255) references users(username), amount real NOT NULL, description varchar(255) NOT NULL, pending boolean NOT NULL);" +
+                    "ALTER TABLE tickets ALTER COLUMN pending SET DEFAULT FALSE;");
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();

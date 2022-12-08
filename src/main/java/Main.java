@@ -1,8 +1,8 @@
 import io.javalin.Javalin;
+import ticketController.TicketController;
 import userController.UserController;
 import util.Util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -26,10 +26,9 @@ public class Main {
             Javalin app = Javalin.create().start(7000);
             app.get("/", ctx -> ctx.result("Hello World"));
             app.post("/user/login", UserController::login);
-            app.get("/user/{name}", ctx -> {
-                ctx.result("binded username space"+ctx.pathParam("name") );
-            });
-            app.post("/user/register", UserController::createUser);
+            app.post("/user/register", UserController::addUser);
+            app.get("/user/ticket", TicketController::getTickets);
+            app.post("/user/ticket", TicketController::addTicket);
             app.get("/admin/approve", ctx -> ctx.result("Trying to approve reimbursement"));
             app.get("/admin/view", ctx -> ctx.result("Get all reimbursements"));
         }catch (SQLException e){

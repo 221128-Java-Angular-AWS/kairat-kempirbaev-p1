@@ -14,6 +14,13 @@ public class UserEntry {
         manager = false;
     }
 
+    public UserEntry(String username, String password, String session, boolean manager) {
+        this.username = username;
+        this.password = password;
+        this.session = session;
+        this.manager = manager;
+    }
+
     public String getUsername() {
         return username;
     }

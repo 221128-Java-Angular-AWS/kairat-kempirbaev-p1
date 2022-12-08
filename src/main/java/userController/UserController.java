@@ -10,9 +10,10 @@ import io.javalin.http.Context;
 import util.Util;
 
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 public class UserController {
-    public static void createUser(Context ctx)   {
+    public static void addUser(Context ctx)   {
         try {
             UserEntry entry = UserController.validateInput(ctx);
             UserDao.addUser(entry);
@@ -54,15 +55,21 @@ public class UserController {
             ctx.result("Bad format");
         }catch(BadInputException ex){
             ctx.status(400);
-            ctx.result("Bad format: username and password needed!");
+            ctx.result("Bad format: username(email) and password needed!");
         }
     }
 
     private static UserEntry validateInput(Context ctx) throws BadInputException, JsonProcessingException{
         UserEntry entry = new ObjectMapper().readValue(ctx.body(), UserEntry.class);
-        if(null == entry.getPassword() || null == entry.getUsername()){
+        if(null == entry.getPassword() ||
+                null == entry.getUsername() ||
+                !Pattern.compile("^(.+)@(\\S+)$")
+                        .matcher(entry.getUsername())
+                        .matches())
+        {
             throw new BadInputException();
         }
+
         return entry;
     }
 }
