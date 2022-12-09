@@ -2,6 +2,7 @@ package ticketController;
 
 import Exceptions.BadInputException;
 import Exceptions.TicketNotAddedException;
+import Exceptions.UnauthorizedException;
 import Exceptions.UserSessionExpiredException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,12 +17,17 @@ public class TicketController {
     public static void getTickets(Context ctx) {
         try {
             UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
-            List<TicketEntry> entries =  TicketDao.getAllTickets(userEntry);
+            List<TicketEntry> entries;
+            if (userEntry.isManager()){
+                entries = TicketDao.getAllTickets();
+            } else {
+                entries = TicketDao.getAllTickets(userEntry);
+            }
             ctx.json(entries);// jackson variation objectMapper.writeValueAsString(request)
-        }catch(UserSessionExpiredException ex){
+        } catch (UserSessionExpiredException ex) {
             ctx.status(401);
             ctx.result("You are not authorized!");
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ctx.status(400);
             ctx.result("Bad format");
         }
@@ -29,14 +35,14 @@ public class TicketController {
 
     public static void addTicket(Context ctx) {
         try {
-            TicketEntry ticketEntry = TicketController.validateInput(ctx);
+            TicketEntry ticketEntry = TicketController.validateCreate(ctx);
             UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
             ticketEntry.setUsername(userEntry.getUsername());
             TicketDao.addTicket(ticketEntry);
-        }catch(BadInputException ex){
+        } catch (BadInputException ex) {
             ctx.status(400);
             ctx.result("Bad format");
-        }catch(JsonProcessingException ex){
+        } catch (JsonProcessingException ex) {
             ctx.status(400);
             ctx.result("Bad format");
         } catch (SQLException ex) {
@@ -51,13 +57,41 @@ public class TicketController {
         }
     }
 
+    public static void approveTicket(Context ctx) {
+        try {
+            TicketEntry entry = new ObjectMapper().readValue(ctx.body(), TicketEntry.class);
+            if (-1 ==  entry.getId() ){
+                throw new BadInputException();
+            }
+            UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
+            if(! userEntry.isManager()){
+                throw new UnauthorizedException();
+            }
+            entry.setPending(false);
+            TicketDao.updateTicket(entry);
+        } catch (BadInputException ex) {
+            ctx.status(400);
+            ctx.result("Bad format");
+        } catch (JsonProcessingException ex) {
+            ctx.status(400);
+            ctx.result("Bad format");
+        } catch (SQLException ex) {
+            ctx.status(500);
+            ctx.result("Server error");
+        } catch (UserSessionExpiredException e) {
+            ctx.status(401);
+            ctx.result("You are not authenticated!");
+        } catch (UnauthorizedException e) {
+            ctx.status(403);
+            ctx.result("You are not authorized to approve!");
+        }
+    }
 
-    private static TicketEntry validateInput(Context ctx) throws JsonProcessingException, BadInputException {
+    private static TicketEntry validateCreate(Context ctx) throws JsonProcessingException, BadInputException {
         TicketEntry entry = new ObjectMapper().readValue(ctx.body(), TicketEntry.class);
         if (-1 == entry.getAmount() || null == entry.getDescription() || null == ctx.cookie("session")) {
             throw new BadInputException();
         }
         return entry;
     }
-
 }

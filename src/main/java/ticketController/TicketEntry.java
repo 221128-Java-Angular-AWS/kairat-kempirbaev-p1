@@ -1,12 +1,13 @@
 package ticketController;
 
 public class TicketEntry {
-    private int id;
+    private long id;
     private String username;
     private double amount;
     private String description;
     private boolean pending;
     public TicketEntry() {
+        id = -1;
         amount = -1;
         pending = true;
     }
@@ -18,7 +19,7 @@ public class TicketEntry {
      * @param description
      * @param pending
      */
-    public TicketEntry(int id, String username, double amount, String description, boolean pending) {
+    public TicketEntry(long id, String username, double amount, String description, boolean pending) {
         this.id = id;
         this.username = username;
         this.amount = amount;
@@ -26,7 +27,7 @@ public class TicketEntry {
         this.pending = pending;
     }
 
-    public int getId() { return id;}
+    public long getId() { return id;}
 
     public void setId(int id) { this.id = id;}
 
