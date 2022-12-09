@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"kairat\",\"manager\":true}",
+							"raw": "{\"username\":\"kairat@mail.com\",\"manager\":true}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -63,7 +63,35 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"password\":\"kairat\",\"manager\":true}",
+							"raw": "{\"password\":\"password\",\"manager\":true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/user/register",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create  INVALID: username not email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"kairat\",\"password\":\"password\",\"manager\":true}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -91,7 +119,35 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"kairat\", \"password\":\"password\"}",
+							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/user/register",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create: alternative user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,7 +175,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"kairat\", \"password\":\"password\"}",
+							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,7 +203,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"manager\", \"password\":\"password\", \"manager\":true}",
+							"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\", \"manager\":true}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,7 +236,35 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"kairat\", \"password\":\"password\"}",
+							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/user/login",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Alternative User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -208,7 +292,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"kairat\", \"password\":\"pssssssssss\"}",
+							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"pssssssssss\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -236,7 +320,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\":\"manager\", \"password\":\"password\"}",
+							"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,19 +344,96 @@
 			]
 		},
 		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:7000",
-					"host": [
-						"localhost"
-					],
-					"port": "7000"
+			"name": "Ticket",
+			"item": [
+				{
+					"name": "New ticket the last authorised",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":23,\r\n    \"description\":\"Here is my long description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/user/ticket",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve ticket Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/admin/ticket",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"admin",
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:7000/user/ticket",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"ticket"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
