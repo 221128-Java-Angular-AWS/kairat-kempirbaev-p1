@@ -60,15 +60,19 @@ public class TicketController {
     public static void approveTicket(Context ctx) {
         try {
             TicketEntry entry = new ObjectMapper().readValue(ctx.body(), TicketEntry.class);
-            if (-1 ==  entry.getId() ){
+            if (-1L ==  entry.getId() ){
                 throw new BadInputException();
             }
-            UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
-            if(! userEntry.isManager()){
-                throw new UnauthorizedException();
+            // Authorize
+            {
+                UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
+                if (!userEntry.isManager()) {
+                    throw new UnauthorizedException();
+                }
             }
-            entry.setPending(false);
             TicketDao.updateTicket(entry);
+            ctx.status(200);
+            ctx.result("Ticked status updated!");
         } catch (BadInputException ex) {
             ctx.status(400);
             ctx.result("Bad format");

@@ -23,10 +23,12 @@ public class TicketDao {
         while (rs.next()) {
             entries.add(
                     new TicketEntry(rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getDouble("amount"),
-                        rs.getString("description"),
-                        rs.getBoolean("pending"))
+                            rs.getString("username"),
+                            rs.getDouble("amount"),
+                            rs.getString("description"),
+                            rs.getBoolean("pending"),
+                            rs.getBoolean("approved")
+                    )
             );
         }
         return entries;
@@ -45,7 +47,9 @@ public class TicketDao {
                             rs.getString("username"),
                             rs.getDouble("amount"),
                             rs.getString("description"),
-                            rs.getBoolean("pending"))
+                            rs.getBoolean("pending"),
+                            rs.getBoolean("approved")
+                    )
             );
         }
         return entries;
@@ -53,7 +57,7 @@ public class TicketDao {
 
     public static void addTicket(TicketEntry entry) throws SQLException, TicketNotAddedException {
         Connection con = Util.getConnection();
-        String insertSql = "insert into tickets(username, amount, description, pending) values(?, ?, ?, true)";
+        String insertSql = "insert into tickets(username, amount, description) values(?, ?, ?)";
         PreparedStatement stmt;
 
         //Insert a ticket
@@ -69,12 +73,15 @@ public class TicketDao {
 
     public static void updateTicket(TicketEntry entry) throws SQLException, BadInputException {
         Connection con = Util.getConnection();
-        String insertSql = "select * from tickets where id = ?";
+        String insertSql = "SELECT * " +
+                            "FROM tickets " +
+                            "WHERE id = ? AND pending = TRUE";
         PreparedStatement  stmt = con.prepareStatement(insertSql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         stmt.setLong(1, entry.getId());
         ResultSet resultSet = stmt.executeQuery();
         if (resultSet.next()) {
             resultSet.updateBoolean("pending", false);
+            resultSet.updateBoolean("approved", entry.isApproved());
             resultSet.updateRow();
         } else {
             throw new BadInputException();
