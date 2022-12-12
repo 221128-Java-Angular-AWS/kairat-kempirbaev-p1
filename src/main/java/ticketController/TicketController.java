@@ -34,8 +34,6 @@ public class TicketController {
         }
     }
 
-
-
     public static void approveTicket(Context ctx) {
         try {
             JSONObject json = new JSONObject(ctx.body());

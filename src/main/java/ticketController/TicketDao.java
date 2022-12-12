@@ -30,7 +30,8 @@ public class TicketDao {
                             rs.getString("username"),
                             rs.getDouble("amount"),
                             rs.getString("description"),
-                            rs.getBoolean("approved")
+                            rs.getBoolean("approved"),
+                            rs.getTimestamp("approvedDate")
                     )
             );
         }
