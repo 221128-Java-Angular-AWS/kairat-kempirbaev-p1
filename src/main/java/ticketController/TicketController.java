@@ -7,6 +7,7 @@ import Exceptions.UserSessionExpiredException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
+import org.json.JSONObject;
 import userController.UserDao;
 import userController.UserEntry;
 
@@ -33,25 +34,11 @@ public class TicketController {
         }
     }
 
-    protected  class Approved {
-        public Approved() {
-            this.approve = false;
-        }
 
-        public boolean isApprove() {
-            return approve;
-        }
-
-        public void setApprove(boolean approve) {
-            this.approve = approve;
-        }
-
-        private boolean approve;
-    }
 
     public static void approveTicket(Context ctx) {
         try {
-            Approved entry = new ObjectMapper().readValue(ctx.body(), Approved.class);
+            JSONObject json = new JSONObject(ctx.body());
             // Manager check
             {
                 UserEntry userEntry = UserDao.getSessionUser(ctx.cookie("session"));
@@ -60,7 +47,7 @@ public class TicketController {
                 }
             }
 
-            long tickedId = TicketDao.createTicket(entry.isApprove());
+            long tickedId = TicketDao.createTicket(json.getBoolean("approved"));
 
             ctx.status(200);
             ctx.result("Ticked status updated:" + tickedId);
@@ -76,9 +63,6 @@ public class TicketController {
         } catch (SQLException ex) {
             ctx.status(500);
             ctx.result("Server error");
-        } catch (JsonProcessingException e) {
-            ctx.status(500);
-            ctx.result("Bad input");
         }
     }
 
