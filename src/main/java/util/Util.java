@@ -29,8 +29,7 @@ public class Util {
             ps.executeUpdate();
             //TICKET TABLE
             ps = conn.prepareStatement("drop table if exists tickets CASCADE;" +
-                    "create table tickets(id serial PRIMARY KEY, username varchar(255) references users(username), amount real NOT NULL, description varchar(255) NOT NULL, pending boolean NOT NULL, approved boolean NOT NULL);" +
-                    "ALTER TABLE tickets ALTER COLUMN pending SET DEFAULT TRUE;" +
+                    "create table tickets(id serial PRIMARY KEY, username varchar(255) references users(username), amount real NOT NULL, description varchar(255) NOT NULL, approved boolean NOT NULL);" +
                     "ALTER TABLE tickets ALTER COLUMN approved SET DEFAULT FALSE;" +
                     "CREATE INDEX ticker_username ON tickets(username);");
             ps.executeUpdate();

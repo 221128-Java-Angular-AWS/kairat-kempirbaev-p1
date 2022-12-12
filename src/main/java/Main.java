@@ -28,7 +28,7 @@ public class Main {
             app.post("/user/login", UserController::login);
             app.post("/user/register", UserController::addUser);
             app.get("/user/ticket", TicketController::getTickets);
-            app.post("/user/ticket", TicketController::addTicket);
+            app.post("/user/ticket", TicketController::submitTicket);
             app.post("/admin/ticket", TicketController::approveTicket);
         }catch (SQLException e){
             System.out.println("No way to recover, Database error");

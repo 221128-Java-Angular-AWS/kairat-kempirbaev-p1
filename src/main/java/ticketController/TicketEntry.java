@@ -5,12 +5,10 @@ public class TicketEntry {
     private String username;
     private double amount;
     private String description;
-    private boolean pending;
     private boolean approved;
     public TicketEntry() {
         id = -1;
         amount = -1;
-        pending = true;
         approved = false;
     }
 
@@ -19,14 +17,12 @@ public class TicketEntry {
      * @param username
      * @param amount
      * @param description
-     * @param pending
      */
-    public TicketEntry(long id, String username, double amount, String description, boolean pending, boolean approved) {
+    public TicketEntry(long id, String username, double amount, String description, boolean approved) {
         this.id = id;
         this.username = username;
         this.amount = amount;
         this.description = description;
-        this.pending = pending;
         this.approved = approved;
     }
 
@@ -60,13 +56,5 @@ public class TicketEntry {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isPending() {
-        return pending;
-    }
-
-    public void setPending(boolean pending) {
-        this.pending = pending;
     }
 }

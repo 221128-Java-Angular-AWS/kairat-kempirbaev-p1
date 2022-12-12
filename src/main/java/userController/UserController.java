@@ -1,6 +1,6 @@
 package userController;
 
-import Exceptions.BadInputException;
+import Exceptions.BadUserException;
 import Exceptions.UserExistsException;
 import Exceptions.UserNotAddedException;
 import Exceptions.UsernamePasswordMismatchException;
@@ -14,23 +14,17 @@ import java.util.regex.Pattern;
 
 public class UserController {
     public static void addUser(Context ctx)   {
-        try {
+        try{
             UserEntry entry = UserController.validateInput(ctx);
             UserDao.addUser(entry);
             ctx.status(201);
         }catch(UserExistsException ex){
             ctx.status(400);
-            ctx.result("User Exists");
-        }catch(UserNotAddedException ex){
-            ctx.status(400);
-            ctx.result("User wasn't added");
-        }catch(SQLException ex){
+            ctx.result(ex.getMessage());
+        }catch(UserNotAddedException | SQLException ex){
             ctx.status(500);
-            ctx.result("Internal Error");
-        }catch(JsonProcessingException ex){
-            ctx.status(400);
-            ctx.result("Bad format");
-        }catch(BadInputException ex){
+            ctx.result("Internal Error: Database error. User wasn't added");
+        }catch(JsonProcessingException | BadUserException ex){
             ctx.status(400);
             ctx.result("Bad format: username and password needed!");
         }
@@ -48,26 +42,22 @@ public class UserController {
         }catch(UsernamePasswordMismatchException exp){
             ctx.html("Wrong username or password!");
             ctx.status(401);
-        } catch (SQLException e) {
+        }catch(SQLException e){
             throw new RuntimeException(e);
-        }catch(JsonProcessingException ex){
+        }catch(JsonProcessingException | BadUserException ex){
             ctx.status(400);
-            ctx.result("Bad format");
-        }catch(BadInputException ex){
-            ctx.status(400);
-            ctx.result("Bad format: username(email) and password needed!");
+            ctx.result("Bad format: username and password needed!");
         }
     }
 
-    private static UserEntry validateInput(Context ctx) throws BadInputException, JsonProcessingException{
+    private static UserEntry validateInput(Context ctx) throws BadUserException, JsonProcessingException{
         UserEntry entry = new ObjectMapper().readValue(ctx.body(), UserEntry.class);
         if(null == entry.getPassword() ||
                 null == entry.getUsername() ||
                 !Pattern.compile("^(.+)@(\\S+)$")
                         .matcher(entry.getUsername())
-                        .matches())
-        {
-            throw new BadInputException();
+                        .matches()){
+            throw new BadUserException();
         }
 
         return entry;

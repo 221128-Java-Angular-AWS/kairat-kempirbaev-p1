@@ -24,7 +24,7 @@ public class UserDao {
             stmt.setString(1, entry.getUsername());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                throw new UserExistsException();
+                throw new UserExistsException("User Exists: " + entry.getUsername() + "  is used");
             }
         }
 

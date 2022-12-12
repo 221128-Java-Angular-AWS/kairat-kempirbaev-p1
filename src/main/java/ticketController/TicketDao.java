@@ -1,41 +1,24 @@
 package ticketController;
 
-import Exceptions.BadInputException;
 import Exceptions.TicketNotAddedException;
-import Exceptions.UserExistsException;
-import Exceptions.UserNotAddedException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import userController.UserController;
 import userController.UserEntry;
 import util.Util;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketDao {
-    public static List<TicketEntry> getAllTickets() throws SQLException {
-        List<TicketEntry> entries = new ArrayList<>();
-        Connection con = Util.getConnection();
-        String selectSql  = "select * from tickets where pending = TRUE";
-        PreparedStatement stmt = con.prepareStatement(selectSql);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            entries.add(
-                    new TicketEntry(rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getDouble("amount"),
-                            rs.getString("description"),
-                            rs.getBoolean("pending"),
-                            rs.getBoolean("approved")
-                    )
-            );
-        }
-        return entries;
+    public static long index = 1;
+    private static List<TicketEntry>  pendingList = Collections.synchronizedList(new LinkedList());
+    public static List<TicketEntry> getAllTickets() {
+        return TicketDao.pendingList;
     }
 
     public static List<TicketEntry> getAllTickets(UserEntry user) throws SQLException {
-        List<TicketEntry> entries = new ArrayList<>();
+        List<TicketEntry> entries = new LinkedList<>();
         Connection con = Util.getConnection();
         String selectSql  = "select * from tickets where username = ?";
         PreparedStatement stmt = con.prepareStatement(selectSql);
@@ -47,17 +30,22 @@ public class TicketDao {
                             rs.getString("username"),
                             rs.getDouble("amount"),
                             rs.getString("description"),
-                            rs.getBoolean("pending"),
                             rs.getBoolean("approved")
                     )
             );
         }
+        entries.addAll(TicketDao.pendingList.stream()
+                                        .filter(ticket -> ticket.getUsername().equals(user.getUsername()))
+                                        .collect(Collectors.toList()));
         return entries;
     }
 
-    public static void addTicket(TicketEntry entry) throws SQLException, TicketNotAddedException {
+    private static long addTicket() throws SQLException, TicketNotAddedException {
+        TicketEntry entry = TicketDao.pendingList.get(0);
+        TicketDao.pendingList.remove(0);
+
         Connection con = Util.getConnection();
-        String insertSql = "insert into tickets(username, amount, description) values(?, ?, ?)";
+        String insertSql = "insert into tickets(username, amount, description, approved) values(?, ?, ?, ?)";
         PreparedStatement stmt;
 
         //Insert a ticket
@@ -65,26 +53,29 @@ public class TicketDao {
         stmt.setString(1, entry.getUsername());
         stmt.setDouble(2, entry.getAmount());
         stmt.setString(3, entry.getDescription());
+        stmt.setBoolean(4, entry.isApproved());
         int i = stmt.executeUpdate();
         if (1 != i) {
-            throw new TicketNotAddedException();
+            throw new TicketNotAddedException("Database server error");
         }
+        return entry.getId();
     }
 
-    public static void updateTicket(TicketEntry entry) throws SQLException, BadInputException {
-        Connection con = Util.getConnection();
-        String insertSql = "SELECT * " +
-                            "FROM tickets " +
-                            "WHERE id = ? AND pending = TRUE";
-        PreparedStatement  stmt = con.prepareStatement(insertSql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        stmt.setLong(1, entry.getId());
-        ResultSet resultSet = stmt.executeQuery();
-        if (resultSet.next()) {
-            resultSet.updateBoolean("pending", false);
-            resultSet.updateBoolean("approved", entry.isApproved());
-            resultSet.updateRow();
-        } else {
-            throw new BadInputException();
+    private static void approveFirst(boolean approved) throws TicketNotAddedException {
+        if(TicketDao.pendingList.size() == 0){
+            throw new TicketNotAddedException("Nothing to add");
         }
+        TicketDao.pendingList.get(0).setApproved(approved);
+    }
+
+    public static long createTicket(boolean approved) throws TicketNotAddedException, SQLException{
+        approveFirst(approved);
+        return addTicket();
+    }
+
+    public static long submitTicket(TicketEntry entry)  {
+        entry.setId(TicketDao.index);
+        TicketDao.pendingList.add(entry);
+        return TicketDao.index++;
     }
 }
