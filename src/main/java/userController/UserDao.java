@@ -4,7 +4,6 @@ import Exceptions.UserExistsException;
 import Exceptions.UserNotAddedException;
 import Exceptions.UserSessionExpiredException;
 import Exceptions.UsernamePasswordMismatchException;
-import util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-    public static void addUser(UserEntry entry) throws UserExistsException, UserNotAddedException, SQLException {
-        Connection con = Util.getConnection();
+    private Connection con;
+
+    public UserDao(Connection con) {
+        this.con = con;
+    }
+
+    public void addUser(UserEntry entry) throws UserExistsException, UserNotAddedException, SQLException {
         String selectSql = "select username from users where username = ?",
                 insertSql = "insert into users(username, password, manager) values(?, ?, ?)";
         PreparedStatement stmt;
@@ -39,8 +43,7 @@ public class UserDao {
         }
     }
 
-    public static void findUser(UserEntry entry) throws SQLException, UsernamePasswordMismatchException {
-        Connection con = Util.getConnection();
+    public  void findUser(UserEntry entry) throws SQLException, UsernamePasswordMismatchException {
         String userSql = "select username from users where username = ? AND password = ?";
         PreparedStatement stmt;
 
@@ -54,8 +57,7 @@ public class UserDao {
         }
     }
 
-    public static void setSession(UserEntry entry) throws SQLException {
-        Connection con = Util.getConnection();
+    public  void setSession(UserEntry entry) throws SQLException {
         String sessionSql = "UPDATE users SET session = ? WHERE username = ?";
         PreparedStatement stmt = con.prepareStatement(sessionSql);
         stmt.setString(1, entry.getSession());
@@ -63,8 +65,7 @@ public class UserDao {
         stmt.executeUpdate();
     }
 
-    public static UserEntry getSessionUser(String sessionId) throws SQLException, UserSessionExpiredException {
-        Connection con = Util.getConnection();
+    public  UserEntry getSessionUser(String sessionId) throws SQLException, UserSessionExpiredException {
         String sessionSql = "select username, manager from users where session = ?";
         PreparedStatement stmt = con.prepareStatement(sessionSql);
         stmt.setString(1, sessionId);

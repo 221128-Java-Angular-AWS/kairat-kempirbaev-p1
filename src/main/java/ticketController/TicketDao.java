@@ -2,24 +2,31 @@ package ticketController;
 
 import Exceptions.TicketNotAddedException;
 import userController.UserEntry;
-import util.Util;
 
 import java.sql.*;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TicketDao {
     public static long index = 1;
-    private static List<TicketEntry>  pendingList = Collections.synchronizedList(new LinkedList());
-    public static List<TicketEntry> getAllTickets() {
-        return TicketDao.pendingList;
+    private  LinkedList<TicketEntry>  pendingList;
+    private Connection con;
+
+    public TicketDao(Connection con) {
+        this.con = con;
+        pendingList = new LinkedList();
     }
 
-    public static List<TicketEntry> getAllTickets(UserEntry user) throws SQLException {
+    public Connection getConnection(){return con;}
+
+    public  List<TicketEntry> getAllTickets() {
+        return pendingList;
+    }
+
+    public  List<TicketEntry> getAllTickets(UserEntry user) throws SQLException {
         List<TicketEntry> entries = new LinkedList<>();
-        Connection con = Util.getConnection();
+        Connection con = getConnection();
         String selectSql  = "select * from tickets where username = ?";
         PreparedStatement stmt = con.prepareStatement(selectSql);
         stmt.setString(1, user.getUsername());
@@ -35,17 +42,26 @@ public class TicketDao {
                     )
             );
         }
-        entries.addAll(TicketDao.pendingList.stream()
+        entries.addAll(pendingList.stream()
                                         .filter(ticket -> ticket.getUsername().equals(user.getUsername()))
                                         .collect(Collectors.toList()));
         return entries;
     }
 
-    private static long addTicket() throws SQLException, TicketNotAddedException {
-        TicketEntry entry = TicketDao.pendingList.get(0);
-        TicketDao.pendingList.remove(0);
+    private  long addTicket(boolean approved) throws SQLException, TicketNotAddedException {
+        TicketEntry entry;
 
-        Connection con = Util.getConnection();
+        //Get an element from the queue
+        synchronized(pendingList){
+            if(0 < pendingList.size()){
+                entry = pendingList.removeFirst();
+            }else{
+                throw new TicketNotAddedException("No pending tickets");
+            }
+        }
+
+        entry.setApproved(approved);
+        Connection con = getConnection();
         String insertSql = "insert into tickets(username, amount, description, approved) values(?, ?, ?, ?)";
         PreparedStatement stmt;
 
@@ -57,26 +73,23 @@ public class TicketDao {
         stmt.setBoolean(4, entry.isApproved());
         int i = stmt.executeUpdate();
         if (1 != i) {
-            throw new TicketNotAddedException("Database server error");
+            throw new RuntimeException("Database server error");
         }
         return entry.getId();
     }
 
-    private static void approveFirst(boolean approved) throws TicketNotAddedException {
-        if(TicketDao.pendingList.size() == 0){
-            throw new TicketNotAddedException("Nothing to add");
+    public  long createTicket(boolean approved) throws TicketNotAddedException, SQLException{
+        return addTicket(approved);
+    }
+
+    public  long submitTicket(TicketEntry entry)  {
+        long id;
+        synchronized (pendingList){
+            id = TicketDao.index;
+            entry.setId(TicketDao.index++);
+            pendingList.add(entry);
         }
-        TicketDao.pendingList.get(0).setApproved(approved);
-    }
 
-    public static long createTicket(boolean approved) throws TicketNotAddedException, SQLException{
-        approveFirst(approved);
-        return addTicket();
-    }
-
-    public static long submitTicket(TicketEntry entry)  {
-        entry.setId(TicketDao.index);
-        TicketDao.pendingList.add(entry);
-        return TicketDao.index++;
+        return id;
     }
 }
