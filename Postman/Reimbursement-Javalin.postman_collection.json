@@ -1,13 +1,13 @@
 {
 	"info": {
 		"_postman_id": "637d806f-ca59-4d40-8d1f-6e1a498e7a54",
-		"name": "API functionality check",
+		"name": "Reimbursement-Javalin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24668494"
 	},
 	"item": [
 		{
-			"name": "Initial tests",
+			"name": "Functional Tests",
 			"item": [
 				{
 					"name": "Register",
@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"different password but the same password\"}",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -27,14 +27,13 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -46,14 +45,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -66,7 +64,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat@mail.com\",\"manager\":true}",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"manager\": true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -74,14 +72,13 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -94,7 +91,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"password\":\"password\",\"manager\":true}",
+									"raw": "{\r\n    \"password\": \"password\",\r\n    \"manager\": true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -102,14 +99,13 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -122,7 +118,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat\",\"password\":\"password\",\"manager\":true}",
+									"raw": "{\r\n    \"username\": \"kairat\",\r\n    \"password\": \"password\",\r\n    \"manager\": true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -130,14 +126,13 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -163,14 +158,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -191,14 +186,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -219,14 +214,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -238,13 +233,13 @@
 					"name": "Login",
 					"item": [
 						{
-							"name": "bad password regular user",
+							"name": "regular user",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"pssssssssss\"}",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -252,14 +247,73 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/kairat@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"kairat@mail.com",
+										"session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "regular user Invalid",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"password\": \"psssssssssss\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users/kairat@mail.com/session",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users",
+										"kairat@mail.com",
+										"session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "regular user Invalid URL name",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users/kairat/session",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users",
+										"kairat",
+										"session"
 									]
 								}
 							},
@@ -270,300 +324,393 @@
 			]
 		},
 		{
-			"name": "Register",
+			"name": "Templates",
 			"item": [
 				{
-					"name": "Create: default user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Register",
+					"item": [
+						{
+							"name": "Create: default user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/register",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"register"
-							]
+						{
+							"name": "Create: alternative user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\", \"manager\":false}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create: manager user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\", \"manager\":true}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Create: alternative user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\", \"manager\":false}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login Regular user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users/kairat@mail.com/session",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users",
+										"kairat@mail.com",
+										"session"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/register",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"register"
-							]
+						{
+							"name": "Login Alternative User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users/alternative@mail.com/session",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users",
+										"alternative@mail.com",
+										"session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Manager user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users/manager@mail.com/session",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users",
+										"manager@mail.com",
+										"session"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Create: manager user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\", \"manager\":true}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Ticket",
+					"item": [
+						{
+							"name": "Create ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"amount\":23,\r\n    \"description\":\"Here is my long description\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/kairat@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"kairat@mail.com"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/register",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"register"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Login",
-			"item": [
-				{
-					"name": "Login Regular user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Create ticket alternative",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"amount\":23,\r\n    \"description\":\"Here is my long description\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/alternative@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"alternative@mail.com"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/login",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login Alternative User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"alternative@mail.com\", \"password\":\"password\"}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Admin: Approve",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"approved\" : true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/login",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login Manager user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"username\":\"manager@mail.com\", \"password\":\"password\"}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Admin: Decline",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"approved\" : false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/login",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Ticket",
-			"item": [
-				{
-					"name": "Create ticket",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"amount\":23,\r\n    \"description\":\"Here is my long description\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get ticket",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/kairat@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"kairat@mail.com"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/user/ticket",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"ticket"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin: Approve",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\" : 1,\r\n    \"approved\" : true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get ticket Alternative",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/alternative@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"alternative@mail.com"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:7000/admin/ticket",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"admin",
-								"ticket"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin: Decline",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\" : 2,\r\n    \"approved\" : false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get ticket MANAGER",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/manager@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"manager@mail.com"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "localhost:7000/admin/ticket",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"admin",
-								"ticket"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get ticket",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:7000/user/ticket",
-							"host": [
-								"localhost"
-							],
-							"port": "7000",
-							"path": [
-								"user",
-								"ticket"
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -588,14 +735,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/kairat@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"kairat@mail.com",
+										"session"
 									]
 								}
 							},
@@ -621,14 +769,13 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
 									]
 								}
 							},
@@ -646,7 +793,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"totallynewpassword\"}",
+									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -654,14 +801,40 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/register",
+									"raw": "localhost:7000/users",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"register"
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create: default user Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"vervhfgl;hfdgjklsdfklgpassword\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/users",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"users"
 									]
 								}
 							},
@@ -687,14 +860,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/kairat@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"kairat@mail.com",
+										"session"
 									]
 								}
 							},
@@ -726,14 +900,45 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get ticket Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/kairat@mail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -759,14 +964,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/kairat@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"kairat@mail.com",
+										"session"
 									]
 								}
 							},
@@ -787,14 +993,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -815,14 +1021,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -834,7 +1040,7 @@
 					"name": "6. Pending tickets are in a queue/list that can only be seen by Managers",
 					"item": [
 						{
-							"name": "Login Manager user",
+							"name": "Login Manager",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -848,14 +1054,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/manager@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"manager@mail.com",
+										"session"
 									]
 								}
 							},
@@ -879,14 +1086,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/manager@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"manager@mail.com"
 									]
 								}
 							},
@@ -912,21 +1119,22 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/manager@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"manager@mail.com",
+										"session"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Get ticket Copy",
+							"name": "Get ticket MANAGER",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -943,27 +1151,27 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/manager@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"manager@mail.com"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Admin: Approve Copy",
+							"name": "Admin: Approve",
 							"request": {
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\" : 1,\r\n    \"approved\" : true\r\n}",
+									"raw": "{\r\n    \"approved\" : true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -971,27 +1179,26 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/admin/ticket",
+									"raw": "localhost:7000/tickets",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"admin",
-										"ticket"
+										"tickets"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Admin: Decline Copy",
+							"name": "Admin: Decline",
 							"request": {
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\" : 2,\r\n    \"approved\" : false\r\n}",
+									"raw": "{\r\n    \"approved\" : false\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -999,21 +1206,20 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/admin/ticket",
+									"raw": "localhost:7000/tickets",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"admin",
-										"ticket"
+										"tickets"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Get ticket Copy",
+							"name": "Get ticket MANAGER",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1030,14 +1236,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/manager@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"manager@mail.com"
 									]
 								}
 							},
@@ -1055,7 +1261,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"username\":\"kairat@mail.com\", \"password\":\"password\"}",
+									"raw": "{\r\n    \"username\": \"kairat@mail.com\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1063,14 +1269,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/kairat@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"kairat@mail.com",
+										"session"
 									]
 								}
 							},
@@ -1094,14 +1301,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/kairat@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"kairat@mail.com"
 									]
 								}
 							},
@@ -1122,14 +1329,15 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/login",
+									"raw": "localhost:7000/users/alternative@mail.com/session",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"login"
+										"users",
+										"alternative@mail.com",
+										"session"
 									]
 								}
 							},
@@ -1153,14 +1361,14 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:7000/user/ticket",
+									"raw": "localhost:7000/tickets/alternative@mail.com",
 									"host": [
 										"localhost"
 									],
 									"port": "7000",
 									"path": [
-										"user",
-										"ticket"
+										"tickets",
+										"alternative@mail.com"
 									]
 								}
 							},
