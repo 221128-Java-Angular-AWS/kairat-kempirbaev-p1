@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class TicketDao {
     public static long index = 1;
-    private  LinkedList<TicketEntry>  pendingList;
+    private final LinkedList<TicketEntry>  pendingList;
     private Connection con;
 
     public TicketDao(Connection con) {
@@ -89,7 +89,6 @@ public class TicketDao {
             entry.setId(TicketDao.index++);
             pendingList.add(entry);
         }
-
         return id;
     }
 }
