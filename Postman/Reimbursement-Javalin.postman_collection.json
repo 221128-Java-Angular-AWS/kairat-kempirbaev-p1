@@ -649,6 +649,58 @@
 							"response": []
 						},
 						{
+							"name": "Get ticket Query Params",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7000/tickets/kairat@mail.com?pending=true",
+									"host": [
+										"localhost"
+									],
+									"port": "7000",
+									"path": [
+										"tickets",
+										"kairat@mail.com"
+									],
+									"query": [
+										{
+											"key": "approved",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "approved",
+											"value": "false",
+											"disabled": true
+										},
+										{
+											"key": "pending",
+											"value": "true"
+										},
+										{
+											"key": "pending",
+											"value": "false",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Get ticket Alternative",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
