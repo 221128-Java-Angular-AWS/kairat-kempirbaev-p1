@@ -20,17 +20,42 @@ public class TicketDao {
 
     public Connection getConnection(){return con;}
 
-    public  List<TicketEntry> getAllTickets() {
+    public  List<TicketEntry> getPendingTickets() {
         return pendingList;
     }
 
-    public  List<TicketEntry> getAllTickets(UserEntry user) throws SQLException {
-        List<TicketEntry> entries = new LinkedList<>();
-        Connection con = getConnection();
+    public List<TicketEntry> getPendingTickets(UserEntry user) {
+        return pendingList.stream()
+                .filter(ticket -> ticket.getUsername().equals(user.getUsername()))
+                .collect(Collectors.toList());
+    }
+
+    public  List<TicketEntry> getProcessedTickets(UserEntry user) throws SQLException {
         String selectSql  = "select * from tickets where username = ?";
         PreparedStatement stmt = con.prepareStatement(selectSql);
         stmt.setString(1, user.getUsername());
         ResultSet rs = stmt.executeQuery();
+        return collectTickets(rs);
+    }
+
+    public  List<TicketEntry> getAllTickets(UserEntry user) throws SQLException {
+        List<TicketEntry> submitted = getProcessedTickets(user);
+        submitted.addAll(getPendingTickets(user));
+        return submitted;
+    }
+
+    public  List<TicketEntry> getApprovedTickets(UserEntry user, boolean approved) throws SQLException {
+        Connection con = getConnection();
+        String selectSql  = "select * from tickets where username = ? and approved = ?";
+        PreparedStatement stmt = con.prepareStatement(selectSql);
+        stmt.setString(1, user.getUsername());
+        stmt.setBoolean(2, approved);
+        ResultSet rs = stmt.executeQuery();
+        return collectTickets(rs);
+    }
+
+    private List<TicketEntry> collectTickets(ResultSet rs) throws SQLException {
+        List<TicketEntry> entries = new LinkedList<>();
         while (rs.next()) {
             entries.add(
                     new TicketEntry(rs.getInt("id"),
@@ -42,9 +67,6 @@ public class TicketDao {
                     )
             );
         }
-        entries.addAll(pendingList.stream()
-                                        .filter(ticket -> ticket.getUsername().equals(user.getUsername()))
-                                        .collect(Collectors.toList()));
         return entries;
     }
 

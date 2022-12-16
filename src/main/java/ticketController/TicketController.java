@@ -9,7 +9,9 @@ import userController.UserDao;
 import userController.UserEntry;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class TicketController {
     private TicketDao ticketDao;
@@ -22,19 +24,56 @@ public class TicketController {
 
     public  void getTickets(Context ctx) {
         try {
+            final String PENDING = "pending",
+                    APPROVED = "approved";
+            List<TicketEntry> entries = new LinkedList<>();
+            //Provided  URI?approved=BOOLEAN&pending=BOOLEAN
+            Map<String, List<String>> params = ctx.queryParamMap();
+            boolean isPending  = ctx.queryParamAsClass(PENDING, Boolean.class).getOrDefault(false),
+                    isApproved = ctx.queryParamAsClass(APPROVED, Boolean.class).getOrDefault(false);
+
             // URI : /tickets/{uname}
+            // Authenticated and Authorized check
             UserEntry userEntry = userDao.getSessionUser(ctx.cookie("session"));
             if(!ctx.pathParam("uname").equals(userEntry.getUsername())){
                 throw new UserSessionExpiredException();
             };
 
-            List<TicketEntry> entries;
+            //Manager
             if (userEntry.isManager()){
-                entries = ticketDao.getAllTickets();
-            } else {
-                entries = ticketDao.getAllTickets(userEntry);
+                ctx.json(ticketDao.getPendingTickets());
+                ctx.status(200);
+                return;
             }
-            ctx.json(entries);// jackson variation objectMapper.writeValueAsString(request)
+
+            //Employee
+            // No Query Parameter
+            if(! (params.containsKey(APPROVED) || params.containsKey(PENDING)) ) {
+                entries = ticketDao.getAllTickets(userEntry);
+                ctx.json(entries);
+                ctx.status(200);
+                return;
+            }
+
+            //Query Parameter SET
+            //Fetch approved query parameter
+            if(params.containsKey(APPROVED)){
+                entries.addAll(ticketDao.getApprovedTickets(userEntry, isApproved));
+            }
+
+            //Fetch pending query parameter
+            if(params.containsKey(PENDING)){
+                if(isPending){
+                    entries.addAll(ticketDao.getPendingTickets(userEntry));
+                }else{
+                    if(!params.containsKey(APPROVED)){
+                        entries.addAll(ticketDao.getProcessedTickets(userEntry));
+                    }
+                }
+            }
+
+            ctx.json(entries);
+            ctx.status(200);
         } catch (UserSessionExpiredException ex) {
             ctx.status(401);
             ctx.result("You are not authorized!");
